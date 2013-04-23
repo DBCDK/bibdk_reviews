@@ -80,7 +80,7 @@ function bibdk_reviews_view($review_ids) {
     $elements[] = _bibdk_review_render_array($review);
   }
 
-  return drupal_render($elements);
+  return count($elements) ? drupal_render($elements) : t('no_reviews_found');
 }
 
 /** Create renderarray for a single review
@@ -113,6 +113,7 @@ function bibdk_reviews_ajax_trigger_form($form, &$form_state, $ids) {
   else {
     $form['ajax_trigger'] = array(
       '#type' => 'submit',
+      '#value' => 'get-reviews',
       '#ajax' => array(
         'callback' => 'bibdk_reviews_ajax_trigger_form_submit',
         'event' => 'click',

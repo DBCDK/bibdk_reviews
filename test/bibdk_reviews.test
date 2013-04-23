@@ -77,17 +77,45 @@ class BibdkReviewsUnitTestCase extends DrupalUnitTestCase{
 
 }
 
-/*class BibdkReviewsWebTestCase extends DrupalWebTestCase {
+class BibdkReviewsWebTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => t('Bibliotek.dk Reviews'),
       'description' => t('Test functionality in the bibdk_reviews module'),
-      'group' => t('Bibliotek.dk'),
+      'group' => t('BBBB'),
     );
   }
 
   public function setUp() {
-    parent::setUp();
+    parent::setUp(array('bibdk_reviews', 'ting_openformat', 'worktabs', 'devel'));
+    variable_set('ting_search_url', 'http://lakiseks.dbc.dk/openbibdk/0.5/');
+
   }
+
+  public function testReviewView(){
+
+    //Test one review
+    $ids = array('870976-anmeld:30885732');
+    $view = bibdk_reviews_view($ids);
+    $this->assertTrue(strpos($view, 'Anvendelse/målgruppe/niveau'), 'First para title found');
+    $this->assertTrue(strpos($view, 'Beskrivelse'), 'Second para title found');
+    $this->assertTrue(strpos($view, 'Det er oplagt at prøve kræfter'), 'Third para found');
+    $this->assertTrue(strpos($view, 'Lektørudtalelse'), 'Type found');
+    $this->assertTrue(strpos($view, 'Helle Winther Olsen'), 'Author found');
+
+    // Test two reviews
+    $ids = array('870976-anmeld:30390342', '870976-anmeld:30390334');
+    $view = bibdk_reviews_view($ids);
+    $this->assertEqual(preg_match_all('@bibdk-review@', $view, $matches), 2, 'two reviews found');
+    $this->assertTrue(strpos($view, 'Tove Delica'), 'First Author found');
+    $this->assertTrue(strpos($view, 'Thomas Sloth'), 'Second Author found');
+
+    // Test no reviews
+    $ids = array();
+    $view = bibdk_reviews_view($ids);
+    $this->assertEqual($view, t('no_reviews_found'), 'No reviews found');
+  }
+
+
 }
-*/
+
