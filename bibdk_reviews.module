@@ -7,7 +7,7 @@
 function bibdk_reviews_ting_openformat_getobject_params() {
   // example:
   return array(
-    'relationData' => 'full',
+    'relationData' => 'uri',
   );
 }
 
