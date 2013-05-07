@@ -1,14 +1,12 @@
 <?php
 
 
-/** Implements hook_ting_openformat_getobject_params
+/** Implements hook_ting_openformat_getobject_params_alter
  * @return array
  */
-function bibdk_reviews_ting_openformat_getobject_params() {
-  // example:
-  return array(
-    'relationData' => 'uri',
-  );
+function bibdk_reviews_ting_openformat_getobject_params_alter($params) {
+
+  $params['relationData'] = 'uri';
 }
 
 /** Get reviews with ids $ids
