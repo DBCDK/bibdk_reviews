@@ -37,9 +37,12 @@ function bibdk_reviews_get_article_view($ids){
 }
 
 function bibdk_reviews_article_view(Manifestation $manifestation){
+
   if ($url = $manifestation->getInfomediaLink()) {
     $link = _ting_infomedia_get_link($manifestation->id, $url);
     $link = theme('ting_infomedia_button', array('ting_infomedia_button' => $link));
+  } else if ( $url = $manifestation->getAccessInformation()){
+    $link = _ting_openformat_parse_element($manifestation->getAccessInformation(),'.', TRUE, TRUE, t('litteratursiden_link', array(), array('context' => 'bibdk_reviews')));
   }
 
   $rating = $manifestation->getReviewRatings();
