@@ -5,4 +5,5 @@ version = 7.x-0.2
 package = Bibliotek.dk
 
 files[] = includes/BibdkReview.inc
+files[] = bibdk_review.material_review.inc
 files[] = test/bibdk_reviews.test
