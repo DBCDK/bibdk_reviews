@@ -19,6 +19,7 @@ class BibdkReviewsUnitTestCase extends DrupalUnitTestCase{
 
   public function testBibdkReview() {
     include_once $this->path . '/includes/BibdkReview.inc';
+    module_load_include('module', 'bibdk_reviews', 'bibdk_reviews');
     $xml = file_get_contents($this->path . '/test/xml/one_response.xml');
 
     // Test method _bibdk_review_convert_result_to_bibdk_reviews
