@@ -10,14 +10,17 @@ function bibdk_reviews_article_ajax_trigger_form_submit($form, $form_state){
   $entity = _bibdk_reviews_get_work_entity_from_manifestation_ids($ids);
   $ids = $entity->getArticleReviews();
   $commands = array(
-    ajax_command_replace('#'.$form['#id'], bibdk_reviews_get_article_view($ids))
+    ajax_command_replace('#'.$form['#id'], bibdk_reviews_get_view_for_articles($ids))
   );
   return array('#type' => 'ajax', '#commands' => $commands);
 }
 
 
-
-function bibdk_reviews_get_article_view($ids){
+/** Get views for a number of articles. Takes an array of article ids as argument. Returns rendered html
+ * @param $ids
+ * @return null|string
+ */
+function bibdk_reviews_get_view_for_articles($ids){
   if (!isset($ids) || !count($ids))
     return t('no reviews 1', array(), array('context' => 'bibdk_reviews'));
   $work = ting_openformat_get_manifestations($ids);
@@ -36,6 +39,10 @@ function bibdk_reviews_get_article_view($ids){
 
 }
 
+/** Get render array for a single article
+ * @param Manifestation $manifestation
+ * @return array
+ */
 function bibdk_reviews_article_view(Manifestation $manifestation){
 
   if ($url = $manifestation->getInfomediaLink()) {
@@ -65,7 +72,10 @@ function bibdk_reviews_article_view(Manifestation $manifestation){
 }
 
 
-
+/** Create rating render array
+ * @param $rating
+ * @return array
+ */
 function bibdk_reviews_get_rating($rating){
   if (!isset($rating) || !strpos($rating, '/')){
     return;

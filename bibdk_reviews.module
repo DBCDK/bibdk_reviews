@@ -83,15 +83,32 @@ function bibdk_reviews_ajax_trigger_form($form, &$form_state, $manifestations_id
   return $form;
 }
 
-function _bibdk_reviews_get_work_entity_from_manifestation_ids($manifestations_ids) {
+/** Get bibdkWork object containing all manifestations (in dkabm format) and all relations connected to a given work
+ * @param $ids
+ * @return array|BibdkWork
+ */
+function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
+
+  $client = new ting_client_class();
   $params = array(
     'objectFormat' => 'dkabm',
-    //'includeHoldingsCount' => false,
-    'relationData' => 'full',
+    'objectId' => $ids,
+    'includeHoldingsCount' => FALSE,
+    'relationData' => 'uri',
   );
+  $result = $client->do_request('object', $params);
 
-  return reset(ting_openformat_get_manifestations($manifestations_ids, $params));
-
+  if (empty($result->collections)) {
+    return array();
+  }
+  foreach ($result->collections as $TingClientObjectCollection) {
+    foreach ($TingClientObjectCollection->objects as $TingClientObject) {
+      $objects[$TingClientObject->id] = $TingClientObject;
+    }
+  }
+  $work = new BibdkWork();
+  $work->setManifestations($objects);
+  return $work;
 }
 
 
