@@ -22,13 +22,13 @@ function bibdk_reviews_article_ajax_trigger_form_submit($form, $form_state){
  */
 function bibdk_reviews_get_view_for_articles($ids){
   if (!isset($ids) || !count($ids))
-    return t('no reviews 1', array(), array('context' => 'bibdk_reviews'));
+    return t('no reviews', array(), array('context' => 'bibdk_reviews'));
   $work = ting_openformat_get_manifestations($ids);
 
   $work = reset($work);
   $manifestations = $work->getManifestations();
   if (!count($manifestations)){
-    return t('no reviews 2', array(), array('context' => 'bibdk_reviews'));
+    return t('no reviews', array(), array('context' => 'bibdk_reviews'));
   }
 
   foreach($manifestations as $manifestation){
@@ -49,7 +49,10 @@ function bibdk_reviews_article_view(Manifestation $manifestation){
     $link = _ting_infomedia_get_link($manifestation->id, $url);
     $link = theme('ting_infomedia_button', array('ting_infomedia_button' => $link));
   } else if ( $url = $manifestation->getAccessInformation()){
-    $link = _ting_openformat_parse_element($manifestation->getAccessInformation(),'.', TRUE, TRUE, t('litteratursiden_link', array(), array('context' => 'bibdk_reviews')));
+
+    $request_method = $manifestation->getRequestMethod();
+    $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
+    $link = _ting_openformat_parse_element($manifestation->getAccessInformation(),'.', TRUE, TRUE, '<span class="icon icon-left icon-darkgrey-infomedia">&nbsp;</span>' . t($text_string , array(), array('context' => 'bibdk_reviews')));
   }
 
   $rating = $manifestation->getReviewRatings();
