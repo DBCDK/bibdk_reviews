@@ -22,6 +22,8 @@ function bibdk_reviews_material_ajax_trigger_form_submit($form, $form_state){
  * @return bool|string
  */
 function bibdk_reviews_view($review_ids) {
+  if (!isset($review_ids) || !is_array($review_ids) || count($review_ids) == 0 )
+    return t('no_reviews_found', array(), array('context' => 'bibdk_reviews'));
   $xml = _bibdk_reviews_getReview_from_webservice($review_ids);
   $reviews = _bibdk_review_convert_result_to_bibdk_reviews($xml);
 
@@ -36,7 +38,7 @@ function bibdk_reviews_view($review_ids) {
     );
   }
 
-  return count($elements) ? drupal_render($elements) : t('no_reviews_found');
+  return count($elements) ? drupal_render($elements) : t('no_reviews_found', array(), array('context' => 'bibdk_reviews'));
 }
 
 
