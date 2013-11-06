@@ -67,7 +67,7 @@ function bibdk_reviews_article_view(Manifestation $manifestation){
     '#title' => $title_url,
     '#creator' => t('reviewed by !creator', array('!creator' => _ting_openformat_parse_element($creator)), array('context' => 'bibdk_reviews')),
     '#publisher' => t('in !publisher', array('!publisher' => _ting_openformat_parse_element($publisher)), array('context' => 'bibdk_reviews')),
-    '#link' => $link,
+    '#link' => isset($link) ? $link : '',
     '#rating' => bibdk_reviews_get_rating($rating),
   );
 
