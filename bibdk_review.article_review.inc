@@ -49,7 +49,6 @@ function bibdk_reviews_article_view(Manifestation $manifestation){
     $link = _ting_infomedia_get_link($manifestation->id, $url);
     $link = theme('ting_infomedia_button', array('ting_infomedia_button' => $link));
   } else if ( $url = $manifestation->getAccessInformation()){
-
     $request_method = $manifestation->getRequestMethod();
     $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
     $link = _ting_openformat_parse_element($manifestation->getAccessInformation(),'.', TRUE, TRUE, '<span class="icon icon-left icon-darkgrey-infomedia">&nbsp;</span>' . t($text_string , array(), array('context' => 'bibdk_reviews')));

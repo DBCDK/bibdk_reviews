@@ -5,13 +5,14 @@
  * @param $form_state
  * @return array
  */
-function bibdk_reviews_material_ajax_trigger_form_submit($form, $form_state){
+function bibdk_reviews_material_ajax_trigger_form_submit($form, $form_state) {
   $ids = $form['ajax_trigger']['#ids'];
   $entity = _bibdk_reviews_get_work_entity_from_manifestation_ids($ids);
   $ids = $entity->getMaterialReview();
   $commands = array(
-    ajax_command_replace('#'.$form['#id'], bibdk_reviews_view($ids))
+    ajax_command_replace('#' . $form['#id'], bibdk_reviews_view($ids))
   );
+
   return array('#type' => 'ajax', '#commands' => $commands);
 
 }
@@ -22,11 +23,11 @@ function bibdk_reviews_material_ajax_trigger_form_submit($form, $form_state){
  * @return bool|string
  */
 function bibdk_reviews_view($review_ids) {
-  if (!isset($review_ids) || !is_array($review_ids) || count($review_ids) == 0 )
+  if (!isset($review_ids) || !is_array($review_ids) || count($review_ids) == 0) {
     return t('no_reviews_found', array(), array('context' => 'bibdk_reviews'));
+  }
   $xml = _bibdk_reviews_getReview_from_webservice($review_ids);
   $reviews = _bibdk_review_convert_result_to_bibdk_reviews($xml);
-
   // Render the view
   $elements = array();
   foreach ($reviews as $review) {
@@ -46,7 +47,7 @@ function bibdk_reviews_view($review_ids) {
  * @param $ids
  * @return array An array of BibdkReview objects
  */
-function _bibdk_reviews_getReview_from_webservice($ids){
+function _bibdk_reviews_getReview_from_webservice($ids) {
   $params = array(
     'objectFormat' => 'docbook',
     'objectId' => $ids,
@@ -60,12 +61,11 @@ function _bibdk_reviews_getReview_from_webservice($ids){
 }
 
 
-
 /** Converts result from webservice to BibdkReview Objects
  * @param $result xml
  * @return array
  */
-function _bibdk_review_convert_result_to_bibdk_reviews($result){
+function _bibdk_review_convert_result_to_bibdk_reviews($result) {
   $dom = new DomDocument();
 
   if (!@$dom->loadXML($result)) {
@@ -79,5 +79,6 @@ function _bibdk_review_convert_result_to_bibdk_reviews($result){
   foreach ($nodelist as $node) {
     $reviews[] = new BibdkReview($node->ownerDocument->saveXML($node));
   }
+
   return $reviews;
 }
