@@ -4,7 +4,10 @@
 module_load_include('inc', 'bibdk_reviews', 'bibdk_review.material_review');
 module_load_include('inc', 'bibdk_reviews', 'bibdk_review.article_review');
 
-/** Implements hook_ting_openformat_getobject_params_alter
+/**
+ * Implements hook_ting_openformat_getobject_params_alter
+ *
+ * @param $params
  * @return array
  */
 function bibdk_reviews_ting_openformat_getobject_params_alter($params) {
@@ -47,11 +50,13 @@ function bibdk_reviews_theme(){
 }
 
 
-/** Form with a trigger button to load reviews for works
+/**
+ * Form with a trigger button to load reviews for works
  *
  * @param $form
  * @param $form_state
- * @param $ids
+ * @param $manifestations_ids
+ * @param $submit_function
  * @return array
  */
 function bibdk_reviews_ajax_trigger_form($form, &$form_state, $manifestations_ids, $submit_function) {
@@ -83,7 +88,9 @@ function bibdk_reviews_ajax_trigger_form($form, &$form_state, $manifestations_id
   return $form;
 }
 
-/** Get bibdkWork object containing all manifestations (in dkabm format) and all relations connected to a given work
+/**
+ * Get bibdkWork object containing all manifestations (in dkabm format) and all relations connected to a given work
+ *
  * @param $ids
  * @return array|BibdkWork
  */
@@ -101,8 +108,9 @@ function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
   if (empty($result->collections)) {
     return array();
   }
+  /* @var $TingClientObjectCollection TingClientObjectCollection */
   foreach ($result->collections as $TingClientObjectCollection) {
-    foreach ($TingClientObjectCollection->objects as $TingClientObject) {
+    foreach ($TingClientObjectCollection->getObjects() as $TingClientObject) {
       $objects[$TingClientObject->id] = $TingClientObject;
     }
   }
@@ -112,20 +120,14 @@ function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
 }
 
 
-
-
-/** Implements hook_worktabs_items
+/**
+ * Implements hook_worktabs_items
+ *
  * @param $tabs
  * @param $entity
  * @return array
  */
 function bibdk_reviews_worktabs_items($tabs, $entity) {
-
-  // following is commented out, because we don't have the relations´in hand at this point
-  /*
-  $review_ids = $entity->getMaterialReview();
-  $trigger_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $review_ids);
-  */
 
   $manifestation_ids = array_keys($entity->getManifestations());
   $trigger_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $manifestation_ids, 'bibdk_reviews_material_ajax_trigger_form_submit');
