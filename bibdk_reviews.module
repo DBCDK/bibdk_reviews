@@ -19,7 +19,7 @@ function bibdk_reviews_ting_openformat_getobject_params_alter($params) {
 /** Implements hook_thme
  * @return array
  */
-function bibdk_reviews_theme(){
+function bibdk_reviews_theme() {
   return array(
     'bibdk-review-material-review' => array(
       'variables' => array(
@@ -29,7 +29,7 @@ function bibdk_reviews_theme(){
       ),
       'template' => 'theme/bibdk_review_material_review',
     ),
-   'bibdk_review_article_review' => array(
+    'bibdk_review_article_review' => array(
       'variables' => array(
         'title' => '',
         'publisher' => '',
@@ -39,7 +39,7 @@ function bibdk_reviews_theme(){
       ),
       'template' => 'theme/bibdk-review-article-review',
     ),
-   'bibdk_review_rating' => array(
+    'bibdk_review_rating' => array(
       'variables' => array(
         'rating' => '',
         'total_stars' => '',
@@ -85,6 +85,7 @@ function bibdk_reviews_ajax_trigger_form($form, &$form_state, $manifestations_id
     );
 
   }
+
   return $form;
 }
 
@@ -103,6 +104,7 @@ function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
     'includeHoldingsCount' => FALSE,
     'relationData' => 'uri',
   );
+
   $result = $client->do_request('object', $params);
 
   if (empty($result->collections)) {
@@ -114,8 +116,10 @@ function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
       $objects[$TingClientObject->id] = $TingClientObject;
     }
   }
+
   $work = new BibdkWork();
   $work->setManifestations($objects);
+
   return $work;
 }
 
