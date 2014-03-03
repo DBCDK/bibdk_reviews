@@ -1,8 +1,8 @@
 <?php
 
 
-module_load_include('inc', 'bibdk_reviews', 'bibdk_review.material_review');
-module_load_include('inc', 'bibdk_reviews', 'bibdk_review.article_review');
+module_load_include('inc', 'bibdk_reviews', 'bibdk_reviews.material_review');
+module_load_include('inc', 'bibdk_reviews', 'bibdk_reviews.article_review');
 
 /**
  * Implements hook_ting_openformat_getobject_params_alter
@@ -37,7 +37,7 @@ function bibdk_reviews_theme() {
         'rating' => '',
         'link' => '',
       ),
-      'template' => 'theme/bibdk-review-article-review',
+      'template' => 'theme/bibdk_review_article_review',
     ),
     'bibdk_review_rating' => array(
       'variables' => array(
