@@ -1,6 +1,6 @@
 <div class='bibdk-review' >
   <?php foreach($sections as $section) : ?>
-  <div class'section'>
+  <div class='section'>
     <h6>
       <?php print $section['title']; ?>
     </h6>
