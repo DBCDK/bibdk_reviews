@@ -132,22 +132,30 @@ function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
  * @return array
  */
 function bibdk_reviews_worktabs_items($tabs, $entity) {
-
+  $tabs = array('reviews' => array());
   $manifestation_ids = array_keys($entity->getManifestations());
-  $trigger_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $manifestation_ids, 'bibdk_reviews_material_ajax_trigger_form_submit');
+  $material_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $manifestation_ids, 'bibdk_reviews_material_ajax_trigger_form_submit');
 
 
   $tabs['reviews']['material_review'] = array(
-    'title' => t('material review'),
-    'rendered' => drupal_render($trigger_form),
-    'weight' => 0,
+    '#entity' => $entity->id,
+    '#title' => array(
+      '#type' => 'translatable',
+      '#translate' => 'material review',
+    ),
+    '#content' => $material_form,
+    '#weight' => 0,
   );
 
-  $trigger_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $manifestation_ids, 'bibdk_reviews_article_ajax_trigger_form_submit');
+  $article_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $manifestation_ids, 'bibdk_reviews_article_ajax_trigger_form_submit');
   $tabs['reviews']['other_review'] = array(
-    'title' => t('other review'),
-    'rendered' => drupal_render($trigger_form),
-    'weight' => 0,
+    '#entity' => $entity->id,
+    '#title' => array(
+      '#type' => 'translatable',
+      '#translate' => 'other review',
+    ),
+    '#content' => $article_form,
+    '#weight' => 0,
   );
 
   return $tabs;
