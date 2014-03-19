@@ -127,11 +127,10 @@ function _bibdk_reviews_get_work_entity_from_manifestation_ids($ids) {
 /**
  * Implements hook_worktabs_items
  *
- * @param $tabs
  * @param $entity
  * @return array
  */
-function bibdk_reviews_worktabs_items($tabs, $entity) {
+function bibdk_reviews_worktabs_items($entity) {
   $tabs = array('reviews' => array());
   $manifestation_ids = array_keys($entity->getManifestations());
   $material_form = drupal_get_form('bibdk_reviews_ajax_trigger_form', $manifestation_ids, 'bibdk_reviews_material_ajax_trigger_form_submit');
