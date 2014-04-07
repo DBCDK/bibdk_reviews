@@ -22,8 +22,14 @@ function bibdk_reviews_article_ajax_trigger_form_submit($form, $form_state) {
  * @return null|string
  */
 function bibdk_reviews_get_view_for_articles($ids) {
+  $no_reviews = array(
+    '#theme' => 'worktabs_no_content',
+    '#no_content' => t('no reviews', array(), array('context' => 'bibdk_reviews')),
+  );
+  $no_reviews = drupal_render($no_reviews);
+
   if (!isset($ids) || !count($ids)) {
-    return t('no reviews', array(), array('context' => 'bibdk_reviews'));
+    return $no_reviews;
   }
   $works = ting_openformat_get_manifestations($ids);
 
@@ -31,7 +37,7 @@ function bibdk_reviews_get_view_for_articles($ids) {
   $work = reset($works);
   $manifestations = $work->getManifestations();
   if (!count($manifestations)) {
-    return t('no reviews', array(), array('context' => 'bibdk_reviews'));
+    return $no_reviews;
   }
 
   foreach ($manifestations as $manifestation) {
