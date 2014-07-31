@@ -72,6 +72,27 @@ function bibdk_reviews_article_view($manifestation) {
   $creator = $manifestation->getCreator();
   $host_publication = $manifestation->getHostPublication();
   $publisher = isset($host_publication) ? $host_publication : $manifestation->getPublisher();
+  $netarchive_element = NULL;
+
+  // check if there's a pdf in DBC Web archive
+  if ( method_exists($manifestation, 'getWebArchive') && $manifestation->getWebArchive() ) {
+    $local_id = urlencode($manifestation->id);
+    // render array for netarchive link:
+    $options = array(
+      'attributes' => array(
+        'title' => t('netarchive link'),
+        'id' => drupal_html_id('netarchive-' . $local_id),
+        'class' => array('netarchive'),
+      ),
+      'html' => TRUE,
+    );
+    $netarchive_link = array(
+      '#theme' => 'bibdk_netarchive_link',
+      '#text' => t('label_netarchive_link', array(), array('context' => 'bibdk_reviews')),
+      '#path' => 'moreinfo/netarchive/' . $local_id,
+      '#options' => $options,
+    );
+  }
 
   return array(
     '#theme' => 'bibdk_review_article_review',
@@ -80,6 +101,7 @@ function bibdk_reviews_article_view($manifestation) {
     '#publisher' => t('in !publisher', array('!publisher' => _ting_openformat_parse_element($publisher)), array('context' => 'bibdk_reviews')),
     '#link' => isset($link) ? $link : '',
     '#rating' => bibdk_reviews_get_rating($rating),
+    '#netarchive' => $netarchive_link,
   );
 
   return ting_openformat_manifestation_view($manifestation);

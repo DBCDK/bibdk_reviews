@@ -6,5 +6,10 @@
   </div>
   <div class='bibdk-review-link'>
     <?php print $link ?>
-</div>
   </div>
+<?php if ( !empty($netarchive) ) { ?>
+  <div class='bibdk-review-link'>
+<?php print drupal_render($netarchive); ?>
+  </div>
+<?php } ?>
+</div>
