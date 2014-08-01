@@ -62,7 +62,23 @@ function bibdk_reviews_article_view($manifestation) {
   else if ($url = $manifestation->getAccessInformation()) {
     $request_method = $manifestation->getRequestMethod();
     $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
-    $link = _ting_openformat_parse_element($manifestation->getAccessInformation(), '.', TRUE, TRUE, '<span class="icon icon-left icon-darkgrey-infomedia">&nbsp;</span>' . t($text_string, array(), array('context' => 'bibdk_reviews')));
+
+    $link = $manifestation->getAccessInformation();
+    $options = array(
+      'attributes' => array(
+        'title' => t('access link'),
+        'id' => drupal_html_id('reviews-' . $manifestation->id),
+        'class' => array('review-link'),
+      ),
+      'html' => TRUE,
+    );
+    $link = array(
+      '#theme' => 'bibdk_netarchive_link',
+      '#text' => t($link['accessInformation'][0]['accessUrlDisplay'], array(), array('context' => 'bibdk_reviews')),
+      '#path' => $link['accessInformation'][0]['accessUrl'],
+      '#options' => $options,
+    );
+
   }
 
   $rating = $manifestation->getReviewRatings();
@@ -101,7 +117,7 @@ function bibdk_reviews_article_view($manifestation) {
     '#publisher' => t('in !publisher', array('!publisher' => _ting_openformat_parse_element($publisher)), array('context' => 'bibdk_reviews')),
     '#link' => isset($link) ? $link : '',
     '#rating' => bibdk_reviews_get_rating($rating),
-    '#netarchive' => $netarchive_link,
+    '#netarchive' => isset($netarchive_link) ? $netarchive_link : '',
   );
 
   return ting_openformat_manifestation_view($manifestation);
