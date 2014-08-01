@@ -62,7 +62,6 @@ function bibdk_reviews_article_view($manifestation) {
   else if ($url = $manifestation->getAccessInformation()) {
     $request_method = $manifestation->getRequestMethod();
     $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
-
     $link = $manifestation->getAccessInformation();
     $options = array(
       'attributes' => array(
