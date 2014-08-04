@@ -1,5 +1,10 @@
 <?php
 
+/**
+* @file
+* Include file for article review content.
+*/
+
 /** Ajax submit callback. Returns rendered reviews
  * @param $form
  * @param $form_state
@@ -55,29 +60,31 @@ function bibdk_reviews_get_view_for_articles($ids) {
  * @return array
  */
 function bibdk_reviews_article_view($manifestation) {
-  if ($url = $manifestation->getInfomediaLink()) {
-    $link = _ting_infomedia_get_link($manifestation->id, $url);
-    $link = theme('ting_infomedia_button', array('ting_infomedia_button' => $link));
-  }
-  else if ($url = $manifestation->getAccessInformation()) {
-    $request_method = $manifestation->getRequestMethod();
-    $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
-    $link = $manifestation->getAccessInformation();
-    $options = array(
+
+  $link = array(
+    '#theme' => 'bibdk_netarchive_link',
+    '#text' => NULL,
+    '#path' => NULL,
+    '#options' => array(
       'attributes' => array(
         'title' => t('access link'),
         'id' => drupal_html_id('reviews-' . $manifestation->id),
         'class' => array('review-link'),
       ),
       'html' => TRUE,
-    );
-    $link = array(
-      '#theme' => 'bibdk_netarchive_link',
-      '#text' => t($link['accessInformation'][0]['accessUrlDisplay'], array(), array('context' => 'bibdk_reviews')),
-      '#path' => $link['accessInformation'][0]['accessUrl'],
-      '#options' => $options,
-    );
+    ),
+  );
 
+  if ($url = $manifestation->getInfomediaLink()) {
+    $link = _ting_infomedia_get_link($manifestation->id, $url);
+    $link = theme('ting_infomedia_button', array('ting_infomedia_button' => $link));
+  }
+  elseif ($url = $manifestation->getAccessInformation()) {
+    $request_method = $manifestation->getRequestMethod();
+    $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
+    $accessInformation = $manifestation->getAccessInformation();
+    $link['#text'] = t($accessInformation['accessInformation'][0]['accessUrlDisplay'], array(), array('context' => 'bibdk_reviews'));
+    $link['#path'] = $accessInformation['accessInformation'][0]['accessUrl'];
   }
 
   $rating = $manifestation->getReviewRatings();
@@ -87,25 +94,24 @@ function bibdk_reviews_article_view($manifestation) {
   $creator = $manifestation->getCreator();
   $host_publication = $manifestation->getHostPublication();
   $publisher = isset($host_publication) ? $host_publication : $manifestation->getPublisher();
-  $netarchive_element = NULL;
 
   // check if there's a pdf in DBC Web archive
+  $netarchive_link = NULL;
   if ( method_exists($manifestation, 'getWebArchive') && $manifestation->getWebArchive() ) {
     $local_id = urlencode($manifestation->id);
     // render array for netarchive link:
-    $options = array(
-      'attributes' => array(
-        'title' => t('netarchive link'),
-        'id' => drupal_html_id('netarchive-' . $local_id),
-        'class' => array('netarchive'),
-      ),
-      'html' => TRUE,
-    );
     $netarchive_link = array(
       '#theme' => 'bibdk_netarchive_link',
       '#text' => t('label_netarchive_link', array(), array('context' => 'bibdk_reviews')),
       '#path' => 'moreinfo/netarchive/' . $local_id,
-      '#options' => $options,
+      '#options' => array(
+        'attributes' => array(
+          'title' => t('netarchive link'),
+          'id' => drupal_html_id('netarchive-' . $local_id),
+          'class' => array('netarchive'),
+        ),
+        'html' => TRUE,
+      ),
     );
   }
 
@@ -114,12 +120,11 @@ function bibdk_reviews_article_view($manifestation) {
     '#title' => $title_url,
     '#creator' => t('reviewed by !creator', array('!creator' => _ting_openformat_parse_element($creator)), array('context' => 'bibdk_reviews')),
     '#publisher' => t('in !publisher', array('!publisher' => _ting_openformat_parse_element($publisher)), array('context' => 'bibdk_reviews')),
-    '#link' => isset($link) ? $link : '',
+    '#link' => $link,
     '#rating' => bibdk_reviews_get_rating($rating),
-    '#netarchive' => isset($netarchive_link) ? $netarchive_link : '',
+    '#netarchive' => $netarchive_link,
   );
 
-  return ting_openformat_manifestation_view($manifestation);
 }
 
 
