@@ -62,9 +62,9 @@ function bibdk_reviews_get_view_for_articles($ids) {
 function bibdk_reviews_article_view($manifestation) {
 
   $link = array(
-    '#theme' => 'bibdk_netarchive_link',
-    '#text' => NULL,
-    '#path' => NULL,
+    '#theme'   => NULL,
+    '#text'    => NULL,
+    '#path'    => NULL,
     '#options' => array(
       'attributes' => array(
         'title' => t('access link'),
@@ -75,14 +75,18 @@ function bibdk_reviews_article_view($manifestation) {
     ),
   );
 
-  if ($url = $manifestation->getInfomediaLink()) {
+  if ( $url = $manifestation->getInfomediaLink() ) {
     $link = _ting_infomedia_get_link($manifestation->id, $url);
-    $link = theme('ting_infomedia_button', array('ting_infomedia_button' => $link));
+    $link = array(
+      '#theme'                => 'ting_infomedia_button',
+      '#ting_infomedia_button' => $link,
+    );
   }
-  elseif ($url = $manifestation->getAccessInformation()) {
+  elseif ( $url = $manifestation->getAccessInformation() ) {
     $request_method = $manifestation->getRequestMethod();
     $text_string = isset($request_method) ? 'review_link_text_' . $request_method : 'review_link_text';
     $accessInformation = $manifestation->getAccessInformation();
+    $link['#theme'] = 'bibdk_netarchive_link';
     $link['#text'] = t($accessInformation['accessInformation'][0]['accessUrlDisplay'], array(), array('context' => 'bibdk_reviews'));
     $link['#path'] = $accessInformation['accessInformation'][0]['accessUrl'];
   }
