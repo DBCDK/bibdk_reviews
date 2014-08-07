@@ -36,6 +36,7 @@ function bibdk_reviews_theme() {
         'creator' => '',
         'rating' => '',
         'link' => '',
+        'netarchive' => '',
       ),
       'template' => 'theme/bibdk_review_article_review',
     ),

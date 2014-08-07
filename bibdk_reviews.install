@@ -1,4 +1,10 @@
 <?php
+
+/**
+* @file
+* Install file for Bibliotek.dk reviews.
+*/
+
 /**
  * Created by JetBrains PhpStorm.
  * User: vibjerg
