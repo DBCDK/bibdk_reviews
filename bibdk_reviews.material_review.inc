@@ -1,5 +1,10 @@
 <?php
 
+/**
+* @file
+* Include file for material review content.
+*/
+
 /** Ajax submit callback. Returns rendered reviews
  * @param $form
  * @param $form_state
