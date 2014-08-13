@@ -67,7 +67,7 @@ function _bibdk_reviews_getReview_from_webservice($ids) {
 
   $client = new ting_client_class();
 
-  return $client->do_get_object($params);
+  return $client->do_request('object',$params);
 
 }
 
